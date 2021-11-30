@@ -1,0 +1,60 @@
+---
+  - name: "MAC OS Setup"
+    hosts: localhost
+    connection: local 
+    tasks:
+ 
+    - community.general.homebrew:
+        name: "{{ item }}"
+        state: present
+      with_list:
+        - coreutils
+        - findutils
+        - gnu-tar
+        - grep
+        - gettext
+        - gpgme
+        - podman
+        - node
+        - golang        
+        - azure-cli
+        - direnv
+        - jq
+        - pstree
+        - python3        
+
+    - community.general.homebrew:
+        name: "{{ item }}"
+        state: linked
+      with_list:
+        - gettext
+
+
+    - homebrew_cask:
+        name: "{{ item }}"
+        state: present
+      with_list:
+        - visual-studio-code
+
+    - name: Docker == Podman
+      ansible.builtin.file:
+        src: //usr/local/bin/podman
+        dest: /usr/local/bin/docker   
+        state: link
+
+    - name: Reminder
+      debug: 
+        msg: 
+          - "    "
+          - "    "
+          - "        --------------------------------------   "
+          - "    "
+          - "     >>>> Don't forget to adapt your PATH  <<<<< "
+          - "    "
+          - "        --------------------------------------   "
+          - "    "
+          - "    "
+    
+
+
+
