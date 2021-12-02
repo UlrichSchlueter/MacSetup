@@ -5,7 +5,7 @@
 
 
 ### Prepare
-Install required components, namely homebrew and ansible. There are many ways to install python on MacOS, I prefer the homebrew way.
+Install required components, namely homebrew and ansible. There are many ways to install python on MacOS, I prefer the homebrew way. 
 
 Run: 
 ```
@@ -22,7 +22,7 @@ Run:
 
 This will install required pieces of software for ARO, Visual Studio Code and also create a link to redirect docker to podman. Some commands like the azure cli require this for now (Nov 2021) (see [https://github.com/Azure/azure-cli/issues/14768], might be fixed by now)
 
-> Please note that this will fail for M1 Macs, because the path to podman is different, but I don't have one try.
+> Please note that this will fail for M1 Macs, because the path to podman is different, but I don't have an M1 Mac try.
 
 
 ## Manual Config: 
@@ -62,7 +62,6 @@ Both Docker for Desktop and Podman create a virtual machine and execute the cont
 | Licence Cost | Yes | No|
 
 
-## Virtual Machine
-Why not install Fedora in a virtual machine and develop ARO in there ? 
+## Virtual Machine Mode
 
-There is no reason to not do that. 
+Due to the restrictions mentioned, some things will require to work in a local or remote VM. Moving to Virtual Machine mode development (installing Fedora in a Virtual Box VM ) completely. Due to the resource consumption of an additional system this may or may not work for you. A setup where you run Visual Studio Code in native mode and develop via an ssh connection using the [Remote ssh plugin](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh ) might be a good compromise.
