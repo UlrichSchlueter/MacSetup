@@ -1,22 +1,31 @@
 ---
   - name: "MAC OS Setup"
     hosts: localhost
+    vars_files:
+    - variables.yml
     connection: local 
     tasks:
+
+
+    - name: Clone linuxify
+      ansible.builtin.git:
+        repo: 'https://github.com/fabiomaia/linuxify.git'
+        dest: "{{ LINUXIFY_TMP_PATH }}"
+        version: master
+
+    - name: Run linuxify
+      shell: "cd {{ LINUXIFY_TMP_PATH }} && echo 'n' | ./linuxify install "
+     
  
     - community.general.homebrew:
         name: "{{ item }}"
         state: present
-      with_list:
-        - coreutils
-        - findutils
-        - gnu-tar
-        - grep
+      with_list:                       
         - gettext
         - gpgme
         - podman
         - node
-        - golang        
+        - "go@{{ GO_VERSION }}"
         - azure-cli
         - direnv
         - jq
@@ -27,7 +36,14 @@
         name: "{{ item }}"
         state: linked
       with_list:
-        - gettext
+        - gettext   
+
+    - community.general.homebrew:
+        name: "{{ item }}"
+        state: linked
+        install_options: overwrite,force
+      with_list:
+        - go@1.14
 
 
     - homebrew_cask:
@@ -41,6 +57,13 @@
         src: //usr/local/bin/podman
         dest: /usr/local/bin/docker   
         state: link
+
+    - name: cleanup
+      ansible.builtin.file:
+        path: "{{ LINUXIFY_TMP_PATH }}"
+        state: absent
+      when: CLEANUP_LINUXIFY_TMP_FOLDER|bool
+        
 
     - name: Reminder
       debug: 

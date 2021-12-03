@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-ansible-playbook brew.yml
+ansible-playbook install-playbook.yml

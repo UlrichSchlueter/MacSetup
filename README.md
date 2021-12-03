@@ -19,19 +19,25 @@ Run:
 ```
 ./3_runAnsiblePlaybook.sh
 ```
+This will execute
+- linuxify your Mac (i.e install all kinds of gnu tools)
+  - using  https://github.com/fabiomaia/linuxify ( an updated version oh the original reference: https://web.archive.org/web/20190704110904/https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x)
+  - also see [Manual Configuration](#manualconfiguration) below
+  - by making your Mac look like Linux as far as ARO is concerned, we save the effort to support two platforms instead of one. 
+- install a pinned version of go , which defined in the `variable.yml` file 
+- add more required and some optional pieces of software for ARO
+- install Visual Studio Code 
+- install podman as replacement for docker and also create a symlink from the `docker` command to `podman`, so that tools that explictly use docker will continue to work. Some commands like the azure cli require this for now (Nov 2021) (see [https://github.com/Azure/azure-cli/issues/14768], might be fixed by now).
 
-This will install required pieces of software for ARO, Visual Studio Code and also create a link to redirect docker to podman. Some commands like the azure cli require this for now (Nov 2021) (see [https://github.com/Azure/azure-cli/issues/14768], might be fixed by now)
+> Please note that this will fail for M1 Macs, because the path to podman is different. 
 
-> Please note that this will fail for M1 Macs, because the path to podman is different, but I don't have an M1 Mac try.
-
-
-## Manual Config: 
+## Manual Configuration
 
 Most ARO scripts expect a Linux environment with all the Gnu tools present. The playbook installed the Mac version of the gnu tools for you. What's left is to make sure that they are found first your $PATH before the Mac native ones. Put a line like the following into .zshrc or your prefered place.  
 
 .zshrc
 ```
-export PATH="/usr/local/bin:/usr/local/opt/coreutils/libexec/gnubin:/usr/local/opt/findutils/libexec/gnubin:/usr/local/opt/grep/libexec/gnubin:$PATH"
+source ~/.linuxify
 ```
 
 
