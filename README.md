@@ -21,10 +21,10 @@ Run:
 ```
 This will execute
 - linuxify your Mac (i.e install all kinds of gnu tools)
-  - using  https://github.com/fabiomaia/linuxify ( an updated version oh the original reference: https://web.archive.org/web/20190704110904/https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x)
+  - using  https://github.com/fabiomaia/linuxify ( an updated version of the original reference: https://web.archive.org/web/20190704110904/https://www.topbug.net/blog/2013/04/14/install-and-use-gnu-command-line-tools-in-mac-os-x)
   - also see [Manual Configuration](#manualconfiguration) below
-  - by making your Mac look like Linux as far as ARO is concerned, we save the effort to support two platforms instead of one. 
-- install a pinned version of go , which defined in the `variable.yml` file 
+  - by making your Mac look like Linux as far as ARO is concerned, you save the effort to support two platforms instead of one. 
+- install a pinned version of go , which is defined in the `variable.yml` file 
 - add more required and some optional pieces of software for ARO
 - install Visual Studio Code 
 - install podman as replacement for docker and also create a symlink from the `docker` command to `podman`, so that tools that explictly use docker will continue to work. Some commands like the azure cli require this for now (Nov 2021) (see [https://github.com/Azure/azure-cli/issues/14768], might be fixed by now).
