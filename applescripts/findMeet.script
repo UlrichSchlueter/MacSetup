@@ -1,0 +1,28 @@
+# Find the first tab with a running google meet window and activate it
+# osacompile it and run it with osascript from a terminal (for example)
+set titleString to "
+"
+
+tell application "Google Chrome"
+	set window_list to every window # get the windows
+	set window_index to 0
+	set found to false
+	repeat with the_window in window_list # for every window
+		set window_index to window_index + 1
+		set tab_list to every tab in the_window # get the tabs
+		set tab_index to 0
+		repeat with the_tab in tab_list # for every tab
+			set tab_index to tab_index + 1
+			
+			set the_title to the title of the_tab # grab the title
+			set titleString to titleString & the_title & return # concatenate
+			if {the_title starts with "Meet -"} then
+				set (active tab index of (first window whose index is window_index)) to tab_index
+				set index of window window_index to 1
+				set found to true
+				exit repeat
+			end if
+		end repeat
+		if found then exit repeat
+	end repeat
+end tell

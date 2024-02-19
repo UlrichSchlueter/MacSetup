@@ -1,3 +1,7 @@
 brew install python3
 
-pip3 install --user ansible
+brew install  ansible
+
+
+
+ansible-galaxy install gantsign.oh-my-zsh

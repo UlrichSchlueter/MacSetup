@@ -1,10 +1,30 @@
 ---
   - name: "MAC OS Setup"
     hosts: localhost
+    vars:
+      date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
     vars_files:
     - variables.yml
     connection: local 
+    roles:
+        - role: gantsign.oh-my-zsh
+          become: yes 
+          become_user: "{{ USER }}"
+          users:
+            - username: "{{ USER }}"
+              oh_my_zsh:
+                theme: robbyrussell
+                plugins:
+                  - git
+                  - direnv
+
     tasks:
+    - name: copy keybindings to system folder 
+      copy:
+        src: keybindings/DefaultKeyBinding.dict
+        dest: "/Users/{{ USER }}/Library/KeyBindings/"
+      tags:
+        - simple_copy
 
 
     - name: Clone linuxify
@@ -15,7 +35,7 @@
 
     - name: Run linuxify
       shell: "cd {{ LINUXIFY_TMP_PATH }} && echo 'n' | ./linuxify install "
-     
+      
  
     - community.general.homebrew:
         name: "{{ item }}"
@@ -31,6 +51,10 @@
         - jq
         - pstree
         - python3        
+        - virtualenv        
+        - gh
+        - direnv
+        - azure-cli
 
     - community.general.homebrew:
         name: "{{ item }}"
@@ -43,7 +67,7 @@
         state: linked
         install_options: overwrite,force
       with_list:
-        - go@1.14
+        - "go@{{ GO_VERSION }}"
 
 
     - homebrew_cask:
@@ -51,13 +75,40 @@
         state: present
       with_list:
         - visual-studio-code
+        - iterm2
+        - rectangle
+
+    - name: Register file
+      stat:
+        path: "/usr/local/bin/podman"
+      register: podman_path
 
     - name: Docker == Podman
       ansible.builtin.file:
-        src: //usr/local/bin/podman
+        src: /usr/local/bin/podman
         dest: /usr/local/bin/docker   
         state: link
+      when: podman_path.stat.exists == True
 
+    - name: zshrc
+      lineinfile: 
+        state: present
+        dest: /Users/Uli/.zshrc
+        regexp: './linuxify'
+        line: '.  ~/.linuxify'
+
+    - name: zshrc
+      lineinfile: 
+        state: present
+        dest: /Users/Uli/.zshrc
+        regexp: 'direnv hook zsh'
+        line: 'eval "$(direnv hook zsh)"'  
+
+    - name: Copy .zshrc file with backup
+      copy:
+        src: /Users/Uli/.zshrc
+        dest: /Users/Uli/.zshrc-uli-{{ date }}
+     
     - name: cleanup
       ansible.builtin.file:
         path: "{{ LINUXIFY_TMP_PATH }}"
